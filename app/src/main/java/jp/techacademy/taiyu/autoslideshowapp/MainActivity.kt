@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.os.Handler
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -48,6 +51,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+       when(requestCode){
+           PERMISSIONS_REQUEST_CODE ->
+               if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                   getContentsInfo()
+               } else {
+                   //アプリを落とす機能？またはアラートダイアログを表示？
+               }
+       }
+    }
+
+
+
+
+
+
 
     @SuppressLint("Recycle")
     private fun getContentsInfo() {
@@ -61,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        if (cursor!!.moveToFirst()) {
+        cursor!!.moveToFirst()
             val fieldIndex = cursor.getColumnIndex(MediaStore.Images.Media._ID)
             val id = cursor.getLong(fieldIndex)
             val imageUri =
@@ -69,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
             imageView.setImageURI(imageUri)
 
-        }
+
 
 
         moveonbutton.setOnClickListener {
